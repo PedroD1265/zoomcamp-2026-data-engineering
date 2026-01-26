@@ -3,3 +3,10 @@
 __pycache__/
 *.pyc[codz]
 *$py.class
+# Jupyter
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Postgres data (NO va a git)
+ny_taxi_postgres_data/
+**/ny_taxi_postgres_data/
