@@ -10,3 +10,6 @@ __pycache__/
 # Postgres data (NO va a git)
 ny_taxi_postgres_data/
 **/ny_taxi_postgres_data/
+
+# Local data
+data/
