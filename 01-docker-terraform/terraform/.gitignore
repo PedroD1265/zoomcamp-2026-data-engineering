@@ -1,0 +1,30 @@
+# Credentials / keys (NO subir)
+keys/
+*.json
+
+# Terraform local state & cache
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variables (pueden tener secretos)
+*.tfvars
+*.tfvars.json
+
+# Local overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# Optional plan files
+*.tfplan
