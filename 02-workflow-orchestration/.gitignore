@@ -1,0 +1,22 @@
+*.parquet
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+.venv/
+
+# local data
+data/
+*.db
+ny_taxi_postgres_data/
+**/ny_taxi_postgres_data/
+
+# secrets
+.env
+.env.*
+.env_encoded
+gcp-creds.json
+*creds*
