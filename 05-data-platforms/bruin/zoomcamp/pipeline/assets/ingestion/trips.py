@@ -4,6 +4,9 @@ type: python
 image: python:3.11
 connection: duckdb-default
 
+depends:
+  - ingestion.payment_lookup
+
 materialization:
   type: table
   strategy: append
@@ -48,6 +51,11 @@ def materialize():
         "fhvhv": ("pickup_datetime", "dropoff_datetime"),
     }
 
+    location_payment_columns = {
+        "yellow": ("PULocationID", "DOLocationID", "payment_type", "fare_amount"),
+        "green": ("PULocationID", "DOLocationID", "payment_type", "fare_amount"),
+    }
+
     frames = []
     for taxi_type in taxi_types:
         pickup_col, dropoff_col = datetime_columns.get(
@@ -59,9 +67,15 @@ def materialize():
                 "https://d37ci6vzurychx.cloudfront.net/trip-data/"
                 f"{taxi_type}_tripdata_{month_start:%Y-%m}.parquet"
             )
+            
+            extra_cols = location_payment_columns.get(
+                taxi_type, ("PULocationID", "DOLocationID", "payment_type", "fare_amount")
+            )
+
+            cols_to_read = [pickup_col, dropoff_col, *extra_cols]
 
             try:
-                dataframe = pd.read_parquet(url, columns=[pickup_col, dropoff_col])
+                dataframe = pd.read_parquet(url, columns=cols_to_read)
             except Exception as exc:
                 print(f"Skipping {url}: {exc}")
                 continue
@@ -70,12 +84,28 @@ def materialize():
                 columns={
                     pickup_col: "pickup_datetime",
                     dropoff_col: "dropoff_datetime",
+                    "PULocationID": "pickup_location_id",
+                    "DOLocationID": "dropoff_location_id",
+                    "payment_type": "payment_type",
+                    "fare_amount": "fare_amount",
                 }
             )
+
+            dataframe["taxi_type"] = taxi_type
             frames.append(dataframe)
 
     if not frames:
-        return pd.DataFrame(columns=["pickup_datetime", "dropoff_datetime"])
+        return pd.DataFrame(
+            columns=[
+                "pickup_datetime",
+                "dropoff_datetime",
+                "pickup_location_id",
+                "dropoff_location_id",
+                "fare_amount",
+                "taxi_type",
+                "payment_type",
+            ]
+        )
 
     final_dataframe = pd.concat(frames, ignore_index=True)
     mask = (final_dataframe["pickup_datetime"] >= start_ts) & (
