@@ -11,3 +11,8 @@ logs/queries
 *.key
 *.p12
 *.pfx
+# DuckDB local databases
+duckdb.db
+**/duckdb.db
+*.duckdb
+*.code-workspace
