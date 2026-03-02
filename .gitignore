@@ -16,3 +16,14 @@ duckdb.db
 **/duckdb.db
 *.duckdb
 *.code-workspace
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# dlt
+.dlt/
+*.duckdb
+*.db
+logs/
