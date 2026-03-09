@@ -1,0 +1,6 @@
+# --- Spark datasets / outputs ---
+**/fhvhv/
+**/*.parquet
+**/*.csv
+**/*.csv.gz
+**/.ipynb_checkpoints/
